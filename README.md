@@ -247,3 +247,15 @@ This fork extends the original for PM/TPM/PO job applications and packages it as
 ## License
 
 MIT
+
+---
+
+## Support
+
+If this toolkit saved you hours of resume work, consider buying me a coffee.
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-donate-yellow?logo=buy-me-a-coffee&logoColor=white)](https://buymeacoffee.com/blpatnaik31)
+&nbsp;&nbsp;
+[![PayPal](https://img.shields.io/badge/Donate-PayPal-blue?logo=paypal&logoColor=white)](https://paypal.me/blpatnaik31)
+
+Voluntary contributions only — the toolkit is and always will be free and open source (MIT).
