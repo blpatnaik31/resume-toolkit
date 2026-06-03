@@ -1,17 +1,18 @@
 ---
 name: resume-toolkit
-description: "Complete resume and CV builder toolkit for tailoring applications to job descriptions. Use this skill when the user wants to build, edit, or critique a resume or CV, generate a cover letter, optimize a LinkedIn profile, extract achievements from research papers, or set up a knowledge base from their work history. Triggers on: /make-resume, /edit-resume, /critique-resume, /make-cl, /new-session, /optimize-linkedin, /setup-extract, /setup-build-kb, or any request to tailor a resume to a job posting, write a cover letter, critique a resume, optimize a LinkedIn profile, extract paper achievements, or build a resume knowledge base. This skill bundles eight sub-skills: new-session, make-resume, edit-resume, critique-resume, make-coverletter, optimize-linkedin, setup-extract, and setup-build-knowledgebase."
+description: "Complete resume and CV builder toolkit for tailoring applications to job descriptions. Use this skill when the user wants to build, edit, or critique a resume or CV, generate a cover letter, optimize a LinkedIn profile, extract achievements from research papers, or set up a knowledge base from their work history. Triggers on: /make-resume, /edit-resume, /critique-resume, /make-cl, /new-session, /career-workbook, /optimize-linkedin, /setup-extract, /setup-build-kb, or any request to tailor a resume to a job posting, write a cover letter, critique a resume, optimize a LinkedIn profile, extract paper achievements, or build a resume knowledge base. This skill bundles nine sub-skills: career-workbook, new-session, make-resume, edit-resume, critique-resume, make-coverletter, optimize-linkedin, setup-extract, and setup-build-knowledgebase."
 ---
 
 # Resume Toolkit
 
 > Based on [ARPeeketi/claude-resume-kit](https://github.com/ARPeeketi/claude-resume-kit) (MIT) — the original anti-fabrication, knowledge-base-first resume system. This fork extends it as a Claude Code skill for PM/TPM/PO applications.
 
-A complete resume and CV builder. This meta-skill bundles eight sub-skills — read the relevant one for your task:
+A complete resume and CV builder. This meta-skill bundles nine sub-skills — read the relevant one for your task:
 
 | Command | Sub-skill file | What it does |
 |---------|---------------|--------------|
-| `/new-session` | `skills/new-session/SKILL.md` | Display master prompt template for a new job application session |
+| `/new-session` | `skills/new-session/SKILL.md` | Two-step entry point: confirm Career Workbook (Step 1), then display session prompt with 4 JD input options (Step 2) |
+| `/career-workbook` | `skills/career-workbook/SKILL.md` | Display, review, and update the Career Workbook standalone |
 | `/make-resume` | `skills/make-resume/SKILL.md` | Generate a tailored resume or CV from a job description |
 | `/edit-resume` | `skills/edit-resume/SKILL.md` | Edit resume/CV or cover letter from critique feedback |
 | `/critique-resume` | `skills/critique-resume/SKILL.md` | Score and critique a resume/CV against a JD |
@@ -23,11 +24,24 @@ A complete resume and CV builder. This meta-skill bundles eight sub-skills — r
 ## Standard Workflow (Job Application)
 
 ```
-/new-session            ← Display master prompt template; fill placeholders; paste JD
-       ↓
-  /make-resume [JD]     ← Phase 0: JD analysis, comp, strategy, framing — STOP for confirmation
-                        ← Phase 1: Bullet plan — STOP for confirmation
-                        ← Phase 2: Generate resume markdown + bullet audit — STOP for review
+/new-session
+  │
+  ├── STEP 1: Career Workbook Review (skills/career-workbook/SKILL.md)
+  │     Display timeline, certifications, verified metrics
+  │     ├── "yes / looks good" → proceed to Step 2
+  │     └── corrections provided → apply edits, loop back to confirm
+  │
+  └── STEP 2: Session Prompt (skills/new-session/SKILL.md)
+        Display template + 4 JD input options:
+          2a  Copy-paste JD inline
+          2b  File path or folder (JDs/*.txt)
+          2c  Upload .txt / .pdf / image
+          2d  URL (Claude fetches + extracts JD)
+        ↓ (user fills template + provides JD)
+
+  /make-resume [JD]     ← Phase 0: JD analysis, comp, strategy, framing — STOP
+                        ← Phase 1: Bullet plan — STOP
+                        ← Phase 2: Generate resume markdown + bullet audit — STOP
        ↓
   ┌─────────────────────────────┬──────────────────────────────┐
   │  resume markdown done       │  /make-cl                    │
@@ -53,11 +67,12 @@ A complete resume and CV builder. This meta-skill bundles eight sub-skills — r
 
 | Sub-skill | Effort | Reason |
 |-----------|--------|--------|
+| `/new-session` | low | Orchestration only; no generation |
+| `/career-workbook` | low | Display + optional edit; no resume generation |
 | `/make-resume` | medium | Structured phases; high effort adds no bullet quality |
 | `/make-cl` | medium | Fixed structure; flows from Phase 0 framing |
 | `/edit-resume` | medium | Targeted edits only |
 | `/critique-resume` | high | Scoring depth benefits from thorough treatment |
-| `/new-session` | low | Display only |
 
 ## How to Invoke a Sub-skill
 
