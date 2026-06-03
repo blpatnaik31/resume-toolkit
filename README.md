@@ -1,0 +1,202 @@
+# Resume Toolkit — Claude Code Skill
+
+A complete resume and CV builder as a Claude Code skill. Bundles eight sub-skills that guide you from raw job description to polished, ATS-optimised resume and cover letter — with mandatory review gates at each phase.
+
+---
+
+## What's Included
+
+| Command | Sub-skill | What it does |
+|---------|-----------|--------------|
+| `/new-session` | `skills/new-session/` | Display master prompt template for a new job application session |
+| `/make-resume` | `skills/make-resume/` | Generate a tailored resume/CV from a JD in three gated phases |
+| `/edit-resume` | `skills/edit-resume/` | Apply critique feedback — tier-1 fixes first |
+| `/critique-resume` | `skills/critique-resume/` | Score resume (and optional CL) against a JD across 8 dimensions |
+| `/make-cl` | `skills/make-coverletter/` | Generate a tailored cover letter from an existing session |
+| `/optimize-linkedin` | `skills/optimize-linkedin/` | Suggest copy-paste LinkedIn profile changes aligned to a goal or JD |
+| `/setup-extract` | `skills/setup-extract/` | Extract achievements from research papers into a knowledge base |
+| `/setup-build-kb` | `skills/setup-build-knowledgebase/` | Synthesise extractions into a resume-ready KB |
+
+---
+
+## Standard Workflow
+
+```
+/new-session               ← fill the session template; paste JD
+        ↓
+/make-resume [JD path]
+    Phase 0: JD analysis, gap mapping, framing strategy, comp table — STOP
+    Phase 1: Bullet plan per position — STOP
+    Phase 2: Generate resume markdown + bullet audit — STOP
+        ↓
+/make-cl                   ← cover letter from Phase 0 framing (no re-research)
+        ↓
+/critique-resume           ← score resume + CL together (8-dimension, 100-pt scale)
+        ↓
+/edit-resume               ← apply tier-1 fixes (resume) + /edit-resume (CL)
+        ↓
+  ┌──────────────────────────────────────────────────┐
+  │  DOCX + PDF → Claude Web (claude.ai)             │
+  │  Paste approved markdown → ask for DOCX/PDF      │
+  └──────────────────────────────────────────────────┘
+```
+
+**Key principle:** All markdown (resume, CL, critique, edits) is generated in CLI. DOCX and PDF are always produced in **Claude Web** (`claude.ai`) — paste the approved markdown there. Claude Web renders significantly better output than CLI for document formatting.
+
+---
+
+## Key Features
+
+### 1. Three-Phase Resume Generation
+- **Phase 0** — JD analysis: requirements table (Direct / Bridge / Gap), ATS keyword bank, gap assessment, company research, framing strategy with reframing map, compensation table, cover letter plan
+- **Phase 1** — Bullet plan: achievement candidates from Career Workbook mapped to JD requirements, priority matrix, budget check
+- **Phase 2** — Generate: summary, skills, experience bullets with char count gate and page fill gate; produces bullet audit table and recruiter kit
+
+### 2. Mandatory Gates
+- **Sponsorship / Viability Gate** — flags GC/Citizen-only roles and C2C mismatches before wasting any tokens
+- **Metric Verification Gate** — every %, $, or headcount must trace back to the Career Workbook; unverified metrics are replaced with directional language automatically
+- **Char Count Gate** — bullets checked to 180–220 chars per line; orphan lines flagged
+- **Budget Gate** — bullet counts confirmed against page-budget targets before Phase 2
+- **MANDATORY STOP** after each phase — work halts until the user explicitly approves before continuing
+
+### 3. Writer Role Selection
+Automatically detects seniority level from the JD and applies the right writing philosophy:
+- **CERW** (Director+ / Executive) — scope-first, strategic outcomes, executive register
+- **CPRW** (Manager / IC) — action verb + metric forward, execution depth, JD keyword density
+
+### 4. 8-Dimension Critique Scoring
+| Dimension | Weight |
+|-----------|--------|
+| Bullet quality | 25% |
+| Narrative cohesion | 15% |
+| ATS compatibility | 15% |
+| Summary | 10% |
+| Skills | 10% |
+| Publications | 10% |
+| Credibility | 10% |
+| Visual layout | 5% |
+
+Produces: five-perspective read-through (ATS / Recruiter / HR / HM / Technical), interview likelihood per reader, tiered improvements (T1 ≥1pt, T2 0.3–0.9pt, T3 <0.3pt), CL critique, post-generation checklist.
+
+### 5. Recruiter Kit
+Generated automatically at the end of Phase 2:
+- Recruiter email (≤150 words)
+- LinkedIn connection note (≤300 chars)
+- Voicemail script (≤80 words)
+- 5 recruiter talking points mapped to JD requirements
+
+---
+
+## Installation
+
+1. Clone this repository into your Claude Code skills folder:
+
+   ```bash
+   git clone https://github.com/blpatnaik31/resume-toolkit ~/.claude/skills/resume-toolkit
+   ```
+
+2. Reload Claude Code (restart the CLI or IDE extension).
+
+3. Verify by typing `/resume-toolkit` — you should see the skill listed.
+
+---
+
+## Usage
+
+### Start a new session
+```
+/new-session
+```
+Displays the master prompt template. Fill in the placeholders (role, JD path, session name) and paste the JD.
+
+### Generate a tailored resume
+```
+/make-resume JDs/Acme_SeniorPM.txt
+/make-resume JDs/JPMC_TPM.txt Focus: Risk Management, ML platforms
+/make-resume Quick: JDs/GlobalLogic_TPM.txt   ← skips Phase 0/1 stops
+```
+
+### Critique a finished resume
+```
+/critique-resume output/Acme/session_Acme_SeniorPM.md
+```
+
+### Generate a cover letter
+```
+/make-cl output/Acme/session_Acme_SeniorPM.md
+```
+
+### Apply edits
+```
+/edit-resume output/Acme/session_Acme_SeniorPM.md
+```
+
+---
+
+## File Structure
+
+```
+resume-toolkit/
+├── SKILL.md                        ← Meta-skill router + verified metrics table
+└── skills/
+    ├── new-session/SKILL.md
+    ├── make-resume/SKILL.md        ← Phase 0 / 1 / 2 + gates + recruiter kit
+    ├── edit-resume/SKILL.md
+    ├── critique-resume/SKILL.md    ← 8-dimension scoring + 5-perspective read
+    ├── make-coverletter/SKILL.md
+    ├── optimize-linkedin/SKILL.md
+    ├── setup-extract/SKILL.md
+    └── setup-build-knowledgebase/SKILL.md
+```
+
+---
+
+## Effort Defaults
+
+| Sub-skill | Effort | Reason |
+|-----------|--------|--------|
+| `/make-resume` | medium | Gated phases; more iterations don't improve bullet quality |
+| `/make-cl` | medium | Fixed structure; flows from Phase 0 framing |
+| `/edit-resume` | medium | Targeted edits only |
+| `/critique-resume` | high | Scoring depth benefits from thorough treatment |
+| `/new-session` | low | Display only |
+
+---
+
+## Conventions
+
+### Session Naming
+`Job Title | Client | Vendor | Employer`
+- **Client** — end-client company (blank if direct hire)
+- **Vendor** — staffing vendor placing the candidate (blank if direct)
+- **Employer** — direct employer of record
+
+Examples:
+- `Senior PM | Santander | OkayaInfocom | OkayaInfocom`
+- `TPM | [direct] | Exaways | Altimetrik`
+- `Technical Project Manager | iRhythm | | GlobalLogic`
+
+### Output Folder Layout
+```
+output/
+└── <CompanyName>_<RoleTag>/
+    ├── session_<name>.md       ← session state machine (phases, status, bullet plan)
+    ├── resume_<name>.md        ← generated resume markdown
+    ├── cl_<name>.md            ← generated cover letter markdown
+    ├── critique_<name>.md      ← critique report + score
+    └── recruiter_kit_<name>.md ← email, LinkedIn note, voicemail, talking points
+```
+
+### Git Commit Messages
+```
+feat(resume): <Company> <Role> — resume markdown DONE
+feat(resume): <Company> <Role> — CL markdown DONE
+chore(jobs):  <Company> <Role> — Phase 0 DONE
+docs(session): <Company> <Role> — Phase N DONE
+```
+
+---
+
+## License
+
+MIT
