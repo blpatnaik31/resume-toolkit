@@ -105,47 +105,59 @@ Generated automatically at the end of Phase 2:
 
 ## Installation
 
-### Prerequisites
+### Step 1 — Install Claude Code
 
-Install Claude Code if you haven't already:
-- **Mac / Linux**: `npm install -g @anthropic-ai/claude-code`
-- **Windows**: `npm install -g @anthropic-ai/claude-code` (requires Node 18+ via [nvm-windows](https://github.com/coreybutler/nvm-windows) or direct install)
-
-> Claude Code requires Node.js 18 or higher. Verify with `node --version`.
+- **Mac**: Download the Mac app from [claude.ai/download](https://claude.ai/download), or use the CLI: `npm install -g @anthropic-ai/claude-code`
+- **Windows**: Download the Windows app from [claude.ai/download](https://claude.ai/download)
+- **Linux**: `npm install -g @anthropic-ai/claude-code` (requires Node.js 18+)
 
 ---
 
-### Mac / Linux
+### Step 2 — Create the skills folder (first time only)
 
+The skill must be placed in your **personal skills folder**. Claude Code looks for skills here regardless of whether you use the desktop app or CLI.
+
+| Platform | Skills folder path |
+|---|---|
+| Mac / Linux | `~/.claude/skills/` |
+| Windows | `%USERPROFILE%\.claude\skills\` (e.g. `C:\Users\YourName\.claude\skills\`) |
+
+**Windows — create the folder if it doesn't exist yet:**
+
+Open File Explorer, navigate to `%USERPROFILE%`, and create the folders `.claude` → `skills` if they aren't there.  
+Or in PowerShell:
+```powershell
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\skills"
+```
+
+---
+
+### Step 3 — Install the skill
+
+**Mac / Linux (Terminal):**
 ```bash
 git clone https://github.com/blpatnaik31/resume-toolkit ~/.claude/skills/resume-toolkit
 ```
 
-Then restart Claude Code (or run `/refresh` in the CLI). Verify by typing `/resume-toolkit`.
-
----
-
-### Windows
-
-**Option A — Git Bash / WSL (recommended)**
-
+**Windows — Git Bash / WSL (recommended):**
 ```bash
 git clone https://github.com/blpatnaik31/resume-toolkit "$HOME/.claude/skills/resume-toolkit"
 ```
 
-**Option B — PowerShell**
-
+**Windows — PowerShell:**
 ```powershell
 git clone https://github.com/blpatnaik31/resume-toolkit "$env:USERPROFILE\.claude\skills\resume-toolkit"
 ```
 
-Then restart Claude Code (or run `/refresh` in the CLI). Verify by typing `/resume-toolkit`.
+> **Don't have Git?** Download it from [git-scm.com/download/win](https://git-scm.com/download/win) (use all defaults), then re-open PowerShell and run the command above.
 
 ---
 
-### VS Code / JetBrains IDE Extension
+### Step 4 — Verify
 
-The skills folder is the same (`~/.claude/skills/` on Mac/Linux, `%USERPROFILE%\.claude\skills\` on Windows). Clone as above, then reload the IDE window — the extension picks up new skills automatically.
+- **Desktop app (Mac or Windows)**: Restart the app, open any conversation, and type `/resume-toolkit` — you should see the skill listed.
+- **CLI**: Restart Claude Code (`claude` in terminal), then type `/resume-toolkit`.
+- **VS Code / JetBrains extension**: Reload the IDE window after cloning — the extension picks up the new skill automatically.
 
 ---
 
