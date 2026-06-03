@@ -2,7 +2,7 @@
 
 > **Based on [ARPeeketi/claude-resume-kit](https://github.com/ARPeeketi/claude-resume-kit)** by [@ARPeeketi](https://github.com/ARPeeketi) — the original knowledge-base-first, anti-fabrication resume system for researchers and engineers. This fork adapts it as a Claude Code skill for PM/TPM/PO job applications, extending the workflow with career workbook management, comp analysis, recruiter kits, and cover letter generation.
 
-A complete resume and CV builder as a Claude Code skill. Bundles eight sub-skills that guide you from raw job description to polished, ATS-optimised resume and cover letter — with mandatory review gates at each phase.
+A complete resume and CV builder as a Claude Code skill. Bundles nine sub-skills that guide you from raw job description to polished, ATS-optimised resume and cover letter — with mandatory review gates at each phase.
 
 ---
 
@@ -10,7 +10,8 @@ A complete resume and CV builder as a Claude Code skill. Bundles eight sub-skill
 
 | Command | Sub-skill | What it does |
 |---------|-----------|--------------|
-| `/new-session` | `skills/new-session/` | Display master prompt template for a new job application session |
+| `/new-session` | `skills/new-session/` | Two-step entry point: confirm Career Workbook (Step 1), then display session prompt with 4 JD input options (Step 2) |
+| `/career-workbook` | `skills/career-workbook/` | Display, review, and update the Career Workbook standalone |
 | `/make-resume` | `skills/make-resume/` | Generate a tailored resume/CV from a JD in three gated phases |
 | `/edit-resume` | `skills/edit-resume/` | Apply critique feedback — tier-1 fixes first |
 | `/critique-resume` | `skills/critique-resume/` | Score resume (and optional CL) against a JD across 8 dimensions |
@@ -24,8 +25,21 @@ A complete resume and CV builder as a Claude Code skill. Bundles eight sub-skill
 ## Standard Workflow
 
 ```
-/new-session               ← fill the session template; paste JD
-        ↓
+/new-session
+  │
+  ├── STEP 1: Career Workbook Review  (/career-workbook)
+  │     Displays timeline, certs, verified metrics as a compact table
+  │     ├── "yes / looks good" → proceed to Step 2
+  │     └── corrections provided → apply edits, re-confirm, loop back
+  │
+  └── STEP 2: Session Prompt
+        4 JD input options:
+          2a  Copy-paste JD inline
+          2b  File path or folder  (e.g. JDs/Acme.txt)
+          2c  Upload .txt / .pdf / image  (Claude extracts text)
+          2d  URL  (Claude fetches + extracts JD, shows preview)
+        ↓ (fill template + provide JD)
+
 /make-resume [JD path]
     Phase 0: JD analysis, gap mapping, framing strategy, comp table — STOP
     Phase 1: Bullet plan per position — STOP
@@ -109,7 +123,13 @@ Generated automatically at the end of Phase 2:
 ```
 /new-session
 ```
-Displays the master prompt template. Fill in the placeholders (role, JD path, session name) and paste the JD.
+Step 1 displays your Career Workbook summary for confirmation (or updates). Step 2 displays the session template with four ways to provide the JD: paste inline, file path, upload, or URL.
+
+### Review or update the Career Workbook standalone
+```
+/career-workbook
+```
+Displays the Career Timeline, certifications, KB corrections, and verified metrics. Accepts corrections (new role, metric update, cert change) before proceeding.
 
 ### Generate a tailored resume
 ```
@@ -139,9 +159,11 @@ Displays the master prompt template. Fill in the placeholders (role, JD path, se
 
 ```
 resume-toolkit/
+├── README.md
 ├── SKILL.md                        ← Meta-skill router + verified metrics table
 └── skills/
-    ├── new-session/SKILL.md
+    ├── career-workbook/SKILL.md    ← Step 1: workbook review + update gate
+    ├── new-session/SKILL.md        ← Step 1+2 orchestrator + 4 JD input options
     ├── make-resume/SKILL.md        ← Phase 0 / 1 / 2 + gates + recruiter kit
     ├── edit-resume/SKILL.md
     ├── critique-resume/SKILL.md    ← 8-dimension scoring + 5-perspective read
@@ -157,11 +179,12 @@ resume-toolkit/
 
 | Sub-skill | Effort | Reason |
 |-----------|--------|--------|
+| `/new-session` | low | Orchestration only; no generation |
+| `/career-workbook` | low | Display + optional edit; no resume generation |
 | `/make-resume` | medium | Gated phases; more iterations don't improve bullet quality |
 | `/make-cl` | medium | Fixed structure; flows from Phase 0 framing |
 | `/edit-resume` | medium | Targeted edits only |
 | `/critique-resume` | high | Scoring depth benefits from thorough treatment |
-| `/new-session` | low | Display only |
 
 ---
 
@@ -217,7 +240,7 @@ This fork extends the original for PM/TPM/PO job applications and packages it as
 - Compensation analysis with 3-layer and 4-layer C2C models
 - Recruiter Kit generation (email, LinkedIn note, voicemail, talking points)
 - Cover letter generation flowing from Phase 0 framing
-- Two-step `/new-session` with workbook review and four JD input methods (in `feat/career-workbook-integration`)
+- Two-step `/new-session` with workbook review and four JD input methods
 
 ---
 
