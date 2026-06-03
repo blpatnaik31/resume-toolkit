@@ -5,6 +5,8 @@ description: "Complete resume and CV builder toolkit for tailoring applications 
 
 # Resume Toolkit
 
+> Based on [ARPeeketi/claude-resume-kit](https://github.com/ARPeeketi/claude-resume-kit) (MIT) — the original anti-fabrication, knowledge-base-first resume system. This fork extends it as a Claude Code skill for PM/TPM/PO applications.
+
 A complete resume and CV builder. This meta-skill bundles eight sub-skills — read the relevant one for your task:
 
 | Command | Sub-skill file | What it does |
