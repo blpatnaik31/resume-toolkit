@@ -1,34 +1,61 @@
 ---
 name: new-session
-description: "Display the master prompt template for a new job application session under the job-applications project. Triggers when user starts a new application, pastes a JD, or says /new-session."
+description: "Two-step entry point for a new job application. Step 1: display and confirm the Career Workbook (with optional updates). Step 2: display the session prompt template with four JD input options. Triggers when user starts a new application, pastes a JD, or says /new-session."
 ---
 
 # /new-session
 
-**Purpose:** Display the master prompt template so the user can fill in the 9 placeholders and paste their JD. This is the mandatory entry point for any new job application. Do not run `/make-resume` without first completing this template.
+**Purpose:** Gate every new job application through two steps:
+1. Review and confirm the Career Workbook is current (with optional edits)
+2. Display the session prompt template with four ways to provide the JD
 
-**Effort:** low — display only; no Career Workbook read required.
+**Effort:** low — no resume generation in this skill.
 
 ---
 
 ## On Invocation
 
-1. Check `CLAUDE.md` Active Sessions — if a session for this company already exists, show its current status and ask if the user wants to continue it (→ `/make-resume`) or start a fresh one.
-2. Display the Master Prompt Template below verbatim in a code block.
-3. Remind the user: "Fill in all 9 fields, paste your full JD into the JD field, then submit. The session will run Phases 0–9 automatically."
-4. Do NOT read the Career Workbook yet — that happens in Phase 1 of `/make-resume`.
+Check `CLAUDE.md` Active Sessions — if a session for this company already exists, show its current status and ask:
+> "A session for [Company] already exists (Status: [X]). Continue it with `/make-resume` or start fresh?"
+
+If continuing: hand off to `/make-resume`. If fresh: proceed to Step 1.
 
 ---
 
-## Master Prompt Template
+## STEP 1 — Career Workbook Review
 
-Display exactly this block (do not paraphrase or summarize it):
+Read `skills/career-workbook/SKILL.md` and execute it fully (Step 1 of that skill). Do not display the session prompt until the user confirms the workbook.
+
+**Summary:** The career-workbook skill will:
+- Display the Career Timeline, certifications, KB corrections, and verified metrics as a compact table
+- Ask the user to confirm or provide changes
+- If changes: apply them, loop back for re-confirmation (Step 1b)
+- If confirmed: hand back here to execute Step 2
+
+---
+
+## STEP 2 — Session Prompt
+
+Once the Career Workbook is confirmed, display this header:
+
+> **Step 2 of 2 — Session Setup**
+>
+> Fill in the fields below. For the JD, choose one of the four input methods:
+>
+> | Option | How to provide the JD |
+> |--------|----------------------|
+> | **2a** | **Copy-paste** — paste the JD text directly into the `JD:` field below |
+> | **2b** | **File path** — provide a local path, e.g. `JDs/Acme_SeniorPM.txt` or a folder `JDs/` |
+> | **2c** | **Upload** — attach a `.txt`, `.pdf`, or image file; Claude will extract the text |
+> | **2d** | **URL** — paste the job posting URL; Claude will fetch and extract the JD |
+
+Then display the Master Prompt Template verbatim in a code block:
 
 ````
 # JOB APPLICATION SESSION
 
 ## Inputs
-JD: {paste full job description here}
+JD: {paste JD text here — or use options 2b/2c/2d above}
 COMPANY: {company name}
 TITLE: {exact job title from JD}
 LOCATION: {city, state — remote / hybrid / onsite}
@@ -67,37 +94,61 @@ Effort: medium for Phases 1–8. High effort for any standalone /critique-resume
 
 ---
 
-## After Display
+## JD Input Handling (Option Resolution)
 
-Say:
+After the user submits, resolve the JD source before handing off to `/make-resume`:
 
-> **Fill in all fields above and paste your full JD into the `JD:` field.**
->
-> **Session type quick-reference:**
-> | TYPE | Comp model | CL required? |
-> |------|-----------|-------------|
-> | FTE (direct) | Salary; no vendor layers | Yes |
-> | C2C (1 vendor) | 3-layer model | Optional |
-> | C2C (2 vendors) | 4-layer model; ⚠️ duplicate sub check | Optional |
-> | LTC | Hourly; check LTC-to-hire option | Optional |
-> | Inbound | Start with recruiter reply; JD pending | No (wait for JD) |
->
-> **Sponsorship quick-reference:**
-> - `yes` = H-1B transfer is acceptable to this employer
-> - `no` = employer cannot sponsor → ⛔ gate fires; requires your explicit override
-> - `unknown` = proceed; flag in session file
+**Option 2a — Inline text**
+JD text is pasted directly. Save to `JDs/temp_{COMPANY}.txt` if no JDs/ file was named, then proceed.
+
+**Option 2b — File path or folder**
+- Single file (e.g., `JDs/Acme.txt`): read the file directly.
+- Folder (e.g., `JDs/`): list files, ask user to confirm which one.
+- Relative paths are resolved from the job-applications project root.
+
+**Option 2c — File upload (txt / pdf / image)**
+- `.txt`: read directly.
+- `.pdf`: use the file-to-markdown converter (`scripts/file-to-markdown-office.py`) if available, otherwise read via the Read tool with PDF support.
+- Image (`.png`, `.jpg`, `.jpeg`): use the Read tool (multimodal) to extract text, then display the extracted JD for confirmation before proceeding.
+- After extraction, save to `JDs/temp_{COMPANY}.txt` and confirm with user.
+
+**Option 2d — URL**
+- Fetch the URL using WebSearch or WebFetch.
+- Extract the job title, company, requirements, and responsibilities from the page.
+- Display extracted JD text to user for confirmation (truncated to first 500 chars + "...").
+- Save confirmed text to `JDs/temp_{COMPANY}.txt`.
+
+**All options:** once JD text is resolved and confirmed, proceed to session file creation below.
+
+---
+
+## Quick-Reference Tables
+
+**Session type:**
+| TYPE | Comp model | CL required? |
+|------|-----------|-------------|
+| FTE (direct) | Salary; no vendor layers | Yes |
+| C2C (1 vendor) | 3-layer model | Optional |
+| C2C (2 vendors) | 4-layer model; ⚠️ duplicate sub check | Optional |
+| LTC | Hourly; check LTC-to-hire option | Optional |
+| Inbound | Start with recruiter reply; JD pending | No (wait for JD) |
+
+**Sponsorship:**
+- `yes` = H-1B transfer is acceptable to this employer
+- `no` = employer cannot sponsor → ⛔ gate fires; requires explicit override
+- `unknown` = proceed; flag in session file
 
 ---
 
 ## Session File Stub
 
-After the user submits the filled template, immediately create the session file before Phase 0 runs:
+After the user submits the filled template and the JD is resolved, create the session file:
 
 ```bash
 mkdir -p output/<DerivedFolderName>/
 ```
 
-Write `output/<DerivedFolderName>/session_<DerivedName>.md` with this header:
+Write `output/<DerivedFolderName>/session_<DerivedName>.md`:
 
 ```markdown
 # Session: {TITLE} | {CLIENT if any} | {VENDOR if any} | {COMPANY}
@@ -122,4 +173,4 @@ Write `output/<DerivedFolderName>/session_<DerivedName>.md` with this header:
 {first 200 chars of JD...}
 ```
 
-Then hand off to `/make-resume` — do not repeat Phase 0 instructions here; they live in `skills/make-resume/SKILL.md`.
+Then hand off to `/make-resume` — phases live in `skills/make-resume/SKILL.md`.
