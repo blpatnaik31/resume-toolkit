@@ -105,15 +105,59 @@ Generated automatically at the end of Phase 2:
 
 ## Installation
 
-1. Clone this repository into your Claude Code skills folder:
+### Prerequisites
 
-   ```bash
-   git clone https://github.com/blpatnaik31/resume-toolkit ~/.claude/skills/resume-toolkit
-   ```
+Install Claude Code if you haven't already:
+- **Mac / Linux**: `npm install -g @anthropic-ai/claude-code`
+- **Windows**: `npm install -g @anthropic-ai/claude-code` (requires Node 18+ via [nvm-windows](https://github.com/coreybutler/nvm-windows) or direct install)
 
-2. Reload Claude Code (restart the CLI or IDE extension).
+> Claude Code requires Node.js 18 or higher. Verify with `node --version`.
 
-3. Verify by typing `/resume-toolkit` — you should see the skill listed.
+---
+
+### Mac / Linux
+
+```bash
+git clone https://github.com/blpatnaik31/resume-toolkit ~/.claude/skills/resume-toolkit
+```
+
+Then restart Claude Code (or run `/refresh` in the CLI). Verify by typing `/resume-toolkit`.
+
+---
+
+### Windows
+
+**Option A — Git Bash / WSL (recommended)**
+
+```bash
+git clone https://github.com/blpatnaik31/resume-toolkit "$HOME/.claude/skills/resume-toolkit"
+```
+
+**Option B — PowerShell**
+
+```powershell
+git clone https://github.com/blpatnaik31/resume-toolkit "$env:USERPROFILE\.claude\skills\resume-toolkit"
+```
+
+Then restart Claude Code (or run `/refresh` in the CLI). Verify by typing `/resume-toolkit`.
+
+---
+
+### VS Code / JetBrains IDE Extension
+
+The skills folder is the same (`~/.claude/skills/` on Mac/Linux, `%USERPROFILE%\.claude\skills\` on Windows). Clone as above, then reload the IDE window — the extension picks up new skills automatically.
+
+---
+
+### Updating
+
+```bash
+# Mac / Linux / Git Bash
+cd ~/.claude/skills/resume-toolkit && git pull
+
+# PowerShell
+cd "$env:USERPROFILE\.claude\skills\resume-toolkit"; git pull
+```
 
 ---
 
