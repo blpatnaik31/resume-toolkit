@@ -1,5 +1,7 @@
 # Resume Toolkit — Claude Code Skill
 
+> **Based on [ARPeeketi/claude-resume-kit](https://github.com/ARPeeketi/claude-resume-kit)** by [@ARPeeketi](https://github.com/ARPeeketi) — the original knowledge-base-first, anti-fabrication resume system for researchers and engineers. This fork adapts it as a Claude Code skill for PM/TPM/PO job applications, extending the workflow with career workbook management, comp analysis, recruiter kits, and cover letter generation.
+
 A complete resume and CV builder as a Claude Code skill. Bundles eight sub-skills that guide you from raw job description to polished, ATS-optimised resume and cover letter — with mandatory review gates at each phase.
 
 ---
@@ -194,6 +196,28 @@ feat(resume): <Company> <Role> — CL markdown DONE
 chore(jobs):  <Company> <Role> — Phase 0 DONE
 docs(session): <Company> <Role> — Phase N DONE
 ```
+
+---
+
+## Credits
+
+This project is a fork of **[ARPeeketi/claude-resume-kit](https://github.com/ARPeeketi/claude-resume-kit)** by [@ARPeeketi](https://github.com/ARPeeketi), licensed under the MIT License.
+
+The original system introduced the core ideas this toolkit is built on:
+- Knowledge-base-first approach (extract once, apply to many JDs)
+- Anti-fabrication controls with provenance flags per achievement
+- Verb discipline rules to prevent overclaiming
+- AI fingerprint avoidance (banned-word lists, structural anti-patterns, post-generation scan)
+- Multi-perspective critique framework (ATS / Recruiter / HR / HM / Technical)
+
+This fork extends the original for PM/TPM/PO job applications and packages it as a Claude Code skill:
+- Career Workbook management with verified metrics enforcement
+- Three-phase gated resume generation (Viability → Bullet Plan → Generate)
+- Writer Role selection (CERW for Director+ / CPRW for Manager/IC)
+- Compensation analysis with 3-layer and 4-layer C2C models
+- Recruiter Kit generation (email, LinkedIn note, voicemail, talking points)
+- Cover letter generation flowing from Phase 0 framing
+- Two-step `/new-session` with workbook review and four JD input methods (in `feat/career-workbook-integration`)
 
 ---
 
