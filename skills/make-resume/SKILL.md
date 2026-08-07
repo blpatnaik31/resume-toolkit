@@ -298,18 +298,64 @@ Present the resume markdown and bullet audit table to the user. Show:
 - Bullet audit table (issues found + fixes applied)
 - Recruiter kit summary
 
-"Resume markdown complete. To run the parallel workflow:
+"Resume markdown complete. HTML resume also generated at `output/<FolderName>/resume_<name>.html`.
+
+To run the parallel workflow:
 1. Run `/make-cl output/<FolderName>/session_<name>.md` to generate the cover letter markdown
 2. Then run `/critique-resume output/<FolderName>/session_<name>.md` to score both together
 3. Then run `/edit-resume` to apply tier-1 fixes
 
-**DOCX + PDF: use Claude Web (claude.ai).** Paste the approved markdown and ask Claude to generate the DOCX and PDF. Claude Web produces better-formatted output than CLI.
+**PDF:** Open the HTML file in browser → File → Print → Save as PDF.
+**DOCX (if required):** Paste approved markdown into Claude Web (claude.ai) — better formatting than CLI.
 
 Or to critique the resume alone now: `/critique-resume output/<FolderName>/session_<name>.md`"
 
-**DOCX generation is NOT done in CLI** — always hand off to Claude Web after edits are approved.
-
 Update Status → `Phase 2: Markdown DONE`
+
+---
+
+## Phase 3: HTML Resume Generation
+
+**Trigger:** Run immediately after Phase 2 Markdown is complete — no user prompt needed. Generate alongside the markdown, before the Markdown Review Stop.
+
+**Template:** `input/resume_template_T1_2col_skills.html` (T1 — two-column skills table, yellow `data-ph` highlights, 26pt name). Read this file once at the start of Phase 3.
+
+**Output file:** `output/<FolderName>/resume_<name>.html`
+
+### Mapping rules — markdown → HTML template
+
+| Markdown element | HTML target |
+|---|---|
+| `# Name, CRED` (H1) | `<div class="header__name">` — strip `#`, keep name + credential suffix |
+| Contact line (city · email · linkedin) | `<div class="header__contact">` — replace `·` separators with ` \|  ` |
+| Credential/cert italic line (MBA · PMP …) | `<div class="header__creds">` |
+| `## Summary` body paragraph | `<p class="summary__body">` — plain prose, no markdown bold |
+| `[ROLE_TITLE]` in section title | `<div class="section__title">` above summary — use the target job title from session framing |
+| Tagline pillars | `<div class="summary__subtitle">` — derive 3 pillars from session Framing Strategy tagline if present; otherwise extract 3 domain themes from the summary paragraph |
+| `## Experience` → each `### Title — Company` block | One `<div class="role">` per position |
+| Role header: Title — Company / Location / Dates | `<div class="role__header">`: `[Title] \| [Company] \| [Location] \| [Dates]` using `<span class="sep">\|</span>` between each part |
+| Each `•` bullet | One `<li>` in `<ul class="bullets">` — convert `**bold**` to `<strong>bold</strong>` |
+| `## Technical Skills` rows (`**Label:** items`) | Two-column skills table: left column = Technical Skills labels+values, right column = empty (leave right `<th>CORE COMPETENCIES</th>` column blank or omit its `<td>` content — skills from markdown go left only) |
+| `## Education` entries | `<div class="edu-row">` per degree — degree bold left, school+year right |
+| `## Certifications` line | `<p class="certs">` — pipe-separated inline list |
+
+### Structural rules
+
+- Remove all `data-ph` attributes from every element in the output file — the output is a filled document, not a template.
+- Remove the template guide `<div>` block at the bottom of the template (the dark navy monospace block with "TEMPLATE GUIDE — delete before submission").
+- Remove the floating `.ph-tip` tooltip div.
+- Keep all CSS and `@media print` rules intact — do not strip the `<style>` block.
+- Replace `[FULL_NAME]` in `<title>` with the candidate's actual name.
+- Skills table: the T1 template has a two-column header (`TECHNICAL SKILLS` | `CORE COMPETENCIES`). Map all skill rows from the markdown to the left `<td>`. Leave right `<td>` cells empty or omit them — do not fabricate competency text.
+- Bold in bullets: convert `**text**` → `<strong>text</strong>`. Strip leading `•` from markdown bullets (the CSS `::before` rule renders the bullet).
+- Page break: the template has a `<div class="page-break">` separating page 1 and page 2. Place it after the 4th role (same as template default). Adjust only if the resume has fewer than 5 roles.
+
+### After generating the HTML file
+
+- Write to `output/<FolderName>/resume_<name>.html`
+- Update session file: add `HTML: output/<FolderName>/resume_<name>.html` to Output Files
+- Update Status → `Phase 3: HTML DONE`
+- Add to the Markdown Review Stop message: "HTML resume saved to `output/<FolderName>/resume_<name>.html` — open in browser and use File → Print → Save as PDF"
 
 ---
 
@@ -363,12 +409,13 @@ Save Recruiter Kit to `output/<FolderName>/recruiter_kit_<Company>.md`
 
 Update session file Status:
 - `Resume: Markdown DONE`
+- `Resume: HTML DONE (output/<FolderName>/resume_<name>.html)`
 - `Cover Letter: PENDING`
 - `Critique: PENDING`
 - `Recruiter Kit: DONE`
 - `Next: /make-cl output/<FolderName>/session_<name>.md`
 - `Next Critique: /critique-resume output/<FolderName>/session_<name>.md`
-- `DOCX/PDF: hand off to Claude Web (claude.ai) after edits approved`
+- `DOCX/PDF: open HTML in browser → File → Print → Save as PDF`
 
 Append one row to `session_learnings.md` Session Log:
 `| [date] | [Job Title | Client | Vendor | Employer] | Resume Markdown DONE | [any token note] |`
@@ -379,10 +426,14 @@ Present: resume markdown (for review), bullet audit table, recruiter kit summary
 
 "Resume markdown done. Recruiter kit saved to output/<FolderName>/recruiter_kit_<Company>.md
 
+HTML resume saved to output/<FolderName>/resume_<name>.html
+→ Open in browser → File → Print → Save as PDF (no Claude Web needed for PDF)
+
 Next steps (parallel workflow):
 1. Run: /make-cl output/<FolderName>/session_<name>.md
    (Cover letter flows directly from Phase 0 framing — no re-read needed)
 2. Then: /critique-resume output/<FolderName>/session_<name>.md
    (Scores resume + CL together)
 3. Then: /edit-resume (applies tier-1 fixes to both resume + CL)
-4. **DOCX + PDF: paste approved markdown into Claude Web (claude.ai) and ask Claude to generate the DOCX/PDF** — Claude Web produces better-formatted output than CLI"
+4. PDF: open HTML in browser → File → Print → Save as PDF
+   (Or paste approved markdown into Claude Web for DOCX if a Word file is required)"
