@@ -63,6 +63,16 @@ A complete resume and CV builder. This meta-skill bundles nine sub-skills — re
 
 **Key principle:** CLI generates all markdown (resume + CL), critiques, and edits. DOCX and PDF are always produced in **Claude Web** (claude.ai) — paste the approved markdown and ask Claude to generate the DOCX/PDF. Claude Web renders significantly better output than CLI for document formatting.
 
+## Writing Style Rules (ALWAYS ENFORCED)
+
+Applies to every generated artifact: resume, CV, cover letter, and any outreach/recruiter email drafted as part of a session. Each sub-skill's own Safety Rules section restates this; treat it as non-negotiable regardless of which sub-skill produced the text.
+
+- **No em dashes (—), anywhere.** Rewrite with a period, comma, colon, or parentheses instead. Before presenting any draft, grep the output for `—` and fix every hit — zero tolerance.
+- **Write like a person, not a keyword-stuffed generator.** Vary sentence length and structure. Don't stack identical subject-verb openers bullet after bullet ("Led... Directed... Drove... Owned..." repeated down every line) — mix verbs, and let some bullets lead with the outcome or the object instead of the verb.
+- **Bold sparingly.** One or two genuinely load-bearing terms per bullet (a metric, a proper noun) — not every noun phrase. Dense per-bullet bolding is the single biggest AI-output tell; when in doubt, bold less.
+- **Prefer plain prose over parallel listicle structure** in summaries and cover letters. Write like the candidate describing their own work in conversation, not a marketing blurb assembled from bullet fragments.
+- Do a final pass before presenting any draft: confirm zero em dashes, and skim for repetitive bullet openers — vary at least every third one.
+
 ## Effort Defaults (embedded — no /effort command required)
 
 | Sub-skill | Effort | Reason |

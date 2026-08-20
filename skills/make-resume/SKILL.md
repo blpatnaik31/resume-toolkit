@@ -31,6 +31,8 @@ Read `config.md` Provenance Flags before generating any content (if `config.md` 
 - Resume bullets: ALL variable bullets are 2L (CV: 2L/3L mix OK)
 - Source ALL bullet content from `Career_Workbook_Master_Lokapati.md`. Never fabricate.
 - Run `python3 resume_builder/helpers/char_count.py` after each section — the tool is authoritative
+- **No em dashes (—) anywhere in generated output.** Use a period, comma, colon, or parentheses instead. Grep the draft for `—` before presenting it and fix every hit.
+- **Write bullets and the Summary like a person, not a keyword list.** Vary sentence structure and bullet openers instead of repeating the same verb pattern down every line; bold only the one or two terms per bullet that genuinely need emphasis. See the toolkit's Writing Style Rules (top-level `SKILL.md`) for the full standard.
 
 ## Metric Verification Gate (MANDATORY — runs before any bullet is presented to user)
 
