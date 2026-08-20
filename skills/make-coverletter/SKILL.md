@@ -23,6 +23,8 @@ Read `config.md` Provenance Flags before generating any content (skip if absent;
 - All metrics must appear in the Verified Workbook Metrics table in the parent `SKILL.md`
 - Para 1 must never open with "I am writing to apply" or any generic opener
 - The CL flows directly from Phase 0 Framing Strategy — no new research required when the session file is complete
+- **No em dashes (—) anywhere in the letter.** Use a period, comma, colon, or parentheses instead. Grep the draft for `—` before presenting it and fix every hit.
+- **Write in natural, first-person prose, not a keyword list.** Vary sentence length, avoid stacking the same sentence pattern paragraph after paragraph, and bold sparingly if at all. See the toolkit's Writing Style Rules (top-level `SKILL.md`) for the full standard.
 
 ---
 

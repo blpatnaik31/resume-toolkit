@@ -37,6 +37,11 @@ Also flag:
 - Sponsorship gate: if session file or JD says "no sponsorship" and the resume was generated anyway, flag ⛔
 - Title inflation: if Experience section shows a title not held per Workbook, flag as Tier 1
 
+## Writing Style Check (MANDATORY — runs alongside Part 0)
+
+- **Em dashes:** grep the resume and CL for `—`. Any hit is a Tier 1 fix — zero em dashes are allowed in final output.
+- **AI-fingerprint tone:** scan for repeated verb-first bullet openers (three or more bullets in a row starting "Led/Directed/Drove/Owned/Built"), dense per-bullet bolding of every noun phrase, and parallel-listicle phrasing in the Summary or CL body. Flag as Tier 2 with specific line references — this reads as AI-generated to a human reviewer even when the content is accurate.
+
 ---
 
 ## User Input During Execution

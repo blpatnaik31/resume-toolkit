@@ -26,6 +26,8 @@ Read `config.md` Provenance Flags before editing (skip if absent; use Career Wor
 - Source ALL bullet content from `Career_Workbook_Master_Lokapati.md` (primary) or `resume_builder/experience/` files if they exist. Never fabricate.
 - Resume bullets: ALL variable bullets must be 2L (CV: 2L/3L mix OK)
 - Run `python3 resume_builder/helpers/char_count.py` after edits — the tool is authoritative
+- **No em dashes (—) anywhere in the output.** Use a period, comma, colon, or parentheses instead. Grep for `—` after every edit pass and fix every hit, even if the em dash was already present before this edit.
+- **Keep edits natural, not listy.** Don't introduce dense per-bullet bolding or repeated verb-first openers while editing. See the toolkit's Writing Style Rules (top-level `SKILL.md`) for the full standard.
 
 ### FIXED Sections — Refuse if Asked to Edit
 Check `config.md` FIXED Sections if it exists; otherwise treat only header/contact/education/certifications as fixed. Say no and explain: these are template-locked across all outputs.
