@@ -96,7 +96,7 @@ All sub-skills share the same project workspace conventions (`CLAUDE.md`, `sessi
 
 ## Knowledge Base
 
-- **Career Workbook:** `../career-progression/Career_Workbook_Master_Lokapati.md` — read ONCE at startup; never re-read mid-session
+- **Career Workbook:** `../Career & Certifications/Career_Workbook_Master_Lokapati.md` (relative to the job-applications project root; canonical source: `/GoogleDrive/Lokapati.Personal1/Jobs/Career & Certifications/Career_Workbook_Master_Lokapati.md`) — read ONCE at startup; never re-read mid-session
 - **Session Learnings:** `session_learnings.md` — file existence map, token patterns, DOCX build workflow
 - **Job Tracker:** `job_tracker.md` — application status; append a row after every new session
 

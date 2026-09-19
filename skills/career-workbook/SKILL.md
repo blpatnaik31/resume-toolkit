@@ -13,7 +13,7 @@ description: "Display, review, and update the Career Workbook before starting a 
 
 ## Workbook Path
 
-Primary: `../career-progression/Career_Workbook_Master_Lokapati.md` (relative to the job-applications project root)
+Primary: `../Career & Certifications/Career_Workbook_Master_Lokapati.md` (relative to the job-applications project root; canonical source: `/GoogleDrive/Lokapati.Personal1/Jobs/Career & Certifications/Career_Workbook_Master_Lokapati.md`)
 
 Fallback derivation order if the primary path does not exist:
 1. Check `CLAUDE.md` Knowledge Base section for an overriding path
