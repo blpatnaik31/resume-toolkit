@@ -171,7 +171,7 @@ End with a compact table:
 
 ## Career Workbook Integration
 
-If the user has a Career Workbook at `career-progression/Career_Workbook_Master_Lokapati.md`:
+If the user has a Career Workbook at `Career & Certifications/Career_Workbook_Master_Lokapati.md`:
 - Cross-reference any metrics or claims against the Workbook before including.
 - If a claim appears in the LinkedIn profile but NOT in the Workbook, flag it (do not remove — flag for user review).
 - If a strong outcome IS in the Workbook but NOT in the LinkedIn profile, recommend adding it under the relevant position.
